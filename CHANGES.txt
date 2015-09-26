@@ -1,9 +1,16 @@
 making changes to:
 
+Implement int getpinfo(void)
 x syscall.c
 x syscall.h
 x user.h
 x usys.S
 x defs.h
 x sysproc.c
-x Makefile
+
+Scheduler-related files
+x trap.c
+x proc.c
+x proc.h
+
+x Makefile -- force OS to use single core

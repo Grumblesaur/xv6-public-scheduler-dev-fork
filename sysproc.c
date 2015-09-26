@@ -94,3 +94,8 @@ int sys_getsyscallinfo(void) {
 	extern int callcount;
 	return callcount;
 }
+
+int sys_getpinfo(void) {
+	return procdump();
+}
+

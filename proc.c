@@ -262,6 +262,9 @@ wait(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+
+//TODO: make scheduler use MLFQ by reading and changing process priorities
+//		as necessary
 void
 scheduler(void)
 {
@@ -432,6 +435,10 @@ kill(int pid)
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.
 // No lock to avoid wedging a stuck machine further.
+
+//TODO: Editing procdump() to take a priority variable by ref. and write
+// 		the process' priority to it; it will return the process ID
+
 void
 procdump(void)
 {
