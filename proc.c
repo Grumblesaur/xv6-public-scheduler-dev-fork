@@ -45,6 +45,7 @@ allocproc(void)
   return 0;
 
 found:
+  p->priority = 1; // default priority == HIGH
   p->state = EMBRYO;
   p->pid = nextpid++;
   release(&ptable.lock);
@@ -269,15 +270,23 @@ void
 scheduler(void)
 {
   struct proc *p;
-
+  int reset = 0; // counter to refresh priorities in scheduler table
+  struct proc * r;
+  
   for(;;){
     // Enable interrupts on this processor.
     sti();
-
+    
+    if (reset % 8192 == 0) {
+		for (r = ptable.proc; r < &ptable.proc[NPROC]; r++) {
+			r->priority = 1;
+		}
+	}
+    
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
+      if((p->state != RUNNABLE) || (p->priority < 1))
         continue;
 
       // Switch to chosen process.  It is the process's job
@@ -294,7 +303,9 @@ scheduler(void)
       proc = 0;
     }
     release(&ptable.lock);
-
+    
+    ++reset;
+    
   }
 }
 
@@ -435,10 +446,6 @@ kill(int pid)
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.
 // No lock to avoid wedging a stuck machine further.
-
-//TODO: Editing procdump() to take a priority variable by ref. and write
-// 		the process' priority to it; it will return the process ID
-
 void
 procdump(void)
 {
@@ -462,7 +469,7 @@ procdump(void)
       state = states[p->state];
     else
       state = "???";
-    cprintf("%d %s %s", p->pid, state, p->name);
+    cprintf("%d %d %s %s", p->pid, p->priority, state, p->name);
     if(p->state == SLEEPING){
       getcallerpcs((uint*)p->context->ebp+2, pc);
       for(i=0; i<10 && pc[i] != 0; i++)

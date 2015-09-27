@@ -96,6 +96,7 @@ int sys_getsyscallinfo(void) {
 }
 
 int sys_getpinfo(void) {
-	return 0; // procdump() does not yet return a value
+	procdump();
+	return 0;
 }
 

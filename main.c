@@ -25,10 +25,10 @@ main(void)
   seginit();       // set up segments
   cprintf("\ncpu%d: starting xv6\n\n", cpu->id);
 
-  cprintf("xv6 build: Murphy 1.1\n");
+  cprintf("xv6 build: Murphy 1.2\n");
   cprintf("Changes since last:\n");
   cprintf("    + This message\n    + Syscall Count Test (sct)\n\n");
-
+  cprintf("    + Setting up scheduler improvements\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
   consoleinit();   // I/O devices & their interrupts
