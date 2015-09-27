@@ -27,8 +27,8 @@ main(void)
 
   cprintf("xv6 build: Murphy 1.2\n");
   cprintf("Changes since last:\n");
-  cprintf("    + This message\n    + Syscall Count Test (sct)\n\n");
-  cprintf("    + Setting up scheduler improvements\n\n");
+  cprintf("    + MLFQ scheduler implemented\n");
+  cprintf("    + Tests added\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
   consoleinit();   // I/O devices & their interrupts
