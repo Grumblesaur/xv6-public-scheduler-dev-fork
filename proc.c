@@ -7,6 +7,8 @@
 #include "proc.h"
 #include "spinlock.h"
 
+unsigned long long reset = 0; // counter to refresh ptable
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -269,7 +271,6 @@ void
 scheduler(void)
 {
   struct proc * p;
-  unsigned long long reset = 0; // counter to refresh priorities in ptable
   struct proc * r;
   int base_priority = 1;
    
