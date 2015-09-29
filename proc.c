@@ -277,14 +277,15 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
-    // reset priorities after 2^13 cycles   
-    if (reset % 2048 == 0) {
-		for (r = ptable.proc; r < &ptable.proc[NPROC]; r++) {
+    // reset priorities after predetermined number of cycles 
+    if (reset == 8192) {
+        for (r = ptable.proc; r < &ptable.proc[NPROC]; r++) {
 			r->priority = 1;
 			r->slices = 0;
             base_priority = 1;
-		}
-	}
+        }
+		reset = 0;
+    }
     
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
