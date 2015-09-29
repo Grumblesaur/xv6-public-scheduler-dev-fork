@@ -15,10 +15,8 @@ int main(void) {
 	for (foo = 0; foo < 20; ++foo) {
 		fork();
 	}
-	for (baz = 0; baz < 150; ++baz) {
-		if(is_prime(baz) && baz == 43){
-			getpinfo();
-		}
+	for (baz = 0; baz < 200; ++baz) {
+		if (is_prime(baz) && baz == 151) getpinfo();
 	}
 	wait();
 	return 0;
