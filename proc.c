@@ -269,23 +269,23 @@ void
 scheduler(void)
 {
   struct proc * p;
-  int reset = 0; // counter to refresh priorities in scheduler table
+  unsigned long long reset = 0; // counter to refresh priorities in ptable
   struct proc * r;
   int base_priority = 1;
-  
    
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
     // reset priorities after 2^13 cycles   
-    if (reset % 8192 == 0) {
+    if (reset % 2048 == 0) {
 		for (r = ptable.proc; r < &ptable.proc[NPROC]; r++) {
 			r->priority = 1;
 			r->slices = 0;
             base_priority = 1;
 		}
 	}
+    
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -302,9 +302,7 @@ scheduler(void)
         p = ptable.proc - 1;
         continue;
       }
-      if (p->priority == 0) {
-        p->slices++;
-      }    
+    
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -313,7 +311,15 @@ scheduler(void)
       p->state = RUNNING;
       swtch(&cpu->scheduler, proc->context);
       switchkvm();
-
+      
+      // if we just ran a process in the lower queue
+      // indicate that it ran for a slice and move the process pointer
+      // back one process so that when we continue, it will run the process
+      // again, unless it has run for two time slices
+      if (p->priority == 0) {
+        ++(p->slices);
+        --p;
+      }
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       proc = 0;
