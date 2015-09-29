@@ -11,16 +11,15 @@ int is_prime(int x) {
 }
 
 int main(void) {
-	int foo;
-	int bar = 0;
-	for (foo = 0; foo < 10; ++foo) {
-		if (is_prime(foo)) {
-			fork();
-			getpinfo();
-		} else {
-			++bar;
-		}
-		wait();
+	int foo, baz;
+	for (foo = 0; foo < 20; ++foo) {
+		fork();
 	}
+	for (baz = 0; baz < 150; ++baz) {
+		if(is_prime(baz) && baz == 43){
+			getpinfo();
+		}
+	}
+	wait();
 	return 0;
 }
