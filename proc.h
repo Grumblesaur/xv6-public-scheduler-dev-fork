@@ -60,6 +60,7 @@ struct proc {
   enum procstate state;        // Process state
   int pid;                     // Process ID
   int priority;                // 1 for high priority, 0 for normal priority
+  int slices;                  // run low-priority process for two slices
   struct proc *parent;         // Parent process
   struct trapframe *tf;        // Trap frame for current syscall
   struct context *context;     // swtch() here to run process

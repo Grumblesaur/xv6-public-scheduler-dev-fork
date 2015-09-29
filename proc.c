@@ -49,6 +49,7 @@ found:
   p->state = EMBRYO;
   p->pid = nextpid++;
   release(&ptable.lock);
+  p->slices = 0;
 
   // Allocate kernel stack.
   if((p->kstack = kalloc()) == 0){
@@ -264,31 +265,46 @@ wait(void)
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
 
-//TODO: make scheduler use MLFQ by reading and changing process priorities
-//		as necessary
 void
 scheduler(void)
 {
-  struct proc *p;
+  struct proc * p;
   int reset = 0; // counter to refresh priorities in scheduler table
   struct proc * r;
+  int base_priority = 1;
   
+   
   for(;;){
     // Enable interrupts on this processor.
     sti();
-    
+
+    // reset priorities after 2^13 cycles   
     if (reset % 8192 == 0) {
 		for (r = ptable.proc; r < &ptable.proc[NPROC]; r++) {
 			r->priority = 1;
+			r->slices = 0;
+            base_priority = 1;
 		}
 	}
-    
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if((p->state != RUNNABLE) || (p->priority < 1))
+      if (p->state != RUNNABLE || p->priority != base_priority)
         continue;
-
+      if (p->priority == 0 && p->slices >= 2) {
+        p->slices = 0;
+        continue;
+      }
+      // if we loop through and find no processes at the higher priority
+      // begin searching lower queue
+      if (p + 1 == &ptable.proc[NPROC]) {
+        base_priority = 0;
+        p = ptable.proc - 1;
+        continue;
+      }
+      if (p->priority == 0) {
+        p->slices++;
+      }    
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
