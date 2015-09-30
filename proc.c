@@ -488,7 +488,7 @@ procdump(void)
   
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 	// skip zombie and unused process slots to make readout simpler
-    if(p->state == UNUSED || p->state == ZOMBIE)
+    if(p->state == UNUSED)
       continue;
     if(p->state >= 0 && p->state < NELEM(states) && states[p->state])
       state = states[p->state];

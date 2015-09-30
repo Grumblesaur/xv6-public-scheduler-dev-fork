@@ -16,7 +16,11 @@ int main(void) {
 		fork();
 	}
 	for (baz = 0; baz < 200; ++baz) {
-		if (is_prime(baz) && baz == 151) getpinfo();
+		if (is_prime(baz) && baz == 151) {
+			getpinfo();
+			printf(1, "===========================\n");
+			sleep(100);
+		}
 	}
 	wait();
 	return 0;
