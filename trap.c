@@ -77,6 +77,10 @@ trap(struct trapframe *tf)
             cpu->id, tf->cs, tf->eip);
     lapiceoi();
     break;
+  case T_PGFLT:
+    cprintf("Segmentation fault: null pointer dereference.\n");
+    proc->killed = 1;
+    break;
    
   //PAGEBREAK: 13
   default:
