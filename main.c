@@ -25,10 +25,10 @@ main(void)
   seginit();       // set up segments
   cprintf("\ncpu%d: starting xv6\n\n", cpu->id);
 
-  cprintf("xv6 build: Murphy 1.2\n");
+  cprintf("xv6 build: Murphy 1.3\n");
   cprintf("Changes since last:\n");
-  cprintf("    + MLFQ scheduler implemented\n");
-  cprintf("    + Tests added\n\n");
+  cprintf("    + nullptr dereferences disallowed\n");
+  cprintf("    + null therefore has a special meaning as a pointer\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
   consoleinit();   // I/O devices & their interrupts

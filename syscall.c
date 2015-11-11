@@ -60,6 +60,10 @@ argptr(int n, char **pp, int size)
     return -1;
   if((uint)i >= proc->sz || (uint)i+size > proc->sz)
     return -1;
+  //XXX: prevent bombing on a system call
+  if(proc->pid > 2 && (uint)i == 0){
+    return -1;
+  }
   *pp = (char*)i;
   return 0;
 }

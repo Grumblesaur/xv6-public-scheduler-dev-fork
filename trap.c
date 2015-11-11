@@ -78,6 +78,8 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
   case T_PGFLT:
+	//XXX: Made a change here. On pagefault (nullptr dereference),
+	// spit out error and kill the process.
     cprintf("Segmentation fault: null pointer dereference.\n");
     proc->killed = 1;
     break;

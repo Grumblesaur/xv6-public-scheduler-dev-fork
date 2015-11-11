@@ -1,16 +1,17 @@
-making changes to:
+James Murphy
+CPSC 405 / Memory Lab
 
-Implement int getpinfo(void)
-x syscall.c
-x syscall.h
-x user.h
-x usys.S
-x defs.h
-x sysproc.c
+In files, all changes marked with XXX: comment tags.
 
-Scheduler-related files
-x trap.c
-x proc.c
-x proc.h
+made changes to:
 
-x Makefile -- force OS to use single core
+trap.c : detects page fault resulting from dereferencing a nullptr
+exec.c : changes start page per process
+Makefile : changes start page per process,
+           compiles xv6nullt as a user-space program
+syscall.c : prevent bombing on nullptr passed to syscall
+
+added:
+
+xv6nullt.c : xv6 null test: tests implementation of special nullptr behavior
+
